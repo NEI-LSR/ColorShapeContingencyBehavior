@@ -4,7 +4,7 @@ This guide describes how to generate each figure in the manuscript. It describes
 
 ## Prerequisites/Notes: 
 
-1. Clone this repo and, wherever you're running the code, set your working directory to your cloned repository (i.e., to the directory that contains subdirectories 'data', 'results', etc.). All paths are relative to this directory. 
+1. Clone this repo. For all python scripts, set your working directory to your cloned repository (i.e., to the directory that contains subdirectories 'data', 'results', etc.). For all MATLAB scripts, let the working directory be the current directory of the analysis script you're running. All paths are relative to these expected working directories.
 
 2. All code has been tested in python 3.12 and MATLAB R2026a. 
 
@@ -106,13 +106,15 @@ This guide describes how to generate each figure in the manuscript. It describes
 
     1. `results/color_categories/csc_chioce_biases.npz` and `results/color_categories/naive_choice_biases.npz`: a zipped archive of numpy arrays. One of the arrays contained in it, `all_choice_biases`, is the input to the next step, and contains all the bootstraped estimates of the choice biases. 
 
-3. **Plot choice biases and run Fourier regression:** Open `analysis/color_categories/analyze_choice_bias.py`. Make sure `subsample_size=None` and `K=6` at the top of this script. If you subsampled in step 2, you would change `subsample_size=` to the subsampled number of trials. `K` is the number of Fourier components to fit in the Fourier regression. Click run; it will run for all subjects and combined subject groups. This script outputs 3 items:
+3. **Plot choice biases and run Fourier regression:** Open `analysis/color_categories/analyze_choice_bias.py`. Make sure `subsample_size=None` and `K=6` at the top of this script. If you subsampled in step 2, you would change `subsample_size=` to the subsampled number of trials. `K` is the number of Fourier components to fit in the Fourier regression. Click run; it will run for all subjects and combined subject groups. This script outputs 4 items:
 
     1. It will print out in your python console, for each subject, the range and magnitude of the range of choice bias. These are reported in the manuscript text.
 
-    2. `figures/fig6/[subject]_choice_bias_curve.svg`, `.png`: Fig. 6A plots (subject = "combined_naive" for averaged untrained monkeys, subject = "buster" for Bu, "castor" for Ca, "pollux" for Po, "morty" for Mo, and Fig. 6B plots (subject = "wooster" for W, "jeeves" for Je, "jocamo" for Jo).
+    2. It will print out in the python console, for each subject, the negative-slope zero-crossings of the smoothed choice bias curve.
 
-    3. `figures/fig6/fourier_component_comparison.svg`, `.png`: Fig. 6C, the comparison of the relative harmonic power between trained and untrained monkeys. 
+    3. `figures/fig6/[subject]_choice_bias_curve.svg`, `.png`: Fig. 6A plots (subject = "combined_naive" for averaged untrained monkeys, subject = "buster" for Bu, "castor" for Ca, "pollux" for Po, "morty" for Mo, and Fig. 6B plots (subject = "wooster" for W, "jeeves" for Je, "jocamo" for Jo).
+
+    4. `figures/fig6/fourier_component_comparison.svg`, `.png`: Fig. 6C, the comparison of the relative harmonic power between trained and untrained monkeys. 
 
 
 ### Figs. 7A and S3: Color Categories psychometric functions and learning curves

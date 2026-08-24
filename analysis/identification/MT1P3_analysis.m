@@ -305,7 +305,7 @@ hold on;
 barError = errorbar(uSamples, pColorProb, se, 'LineStyle', 'none', 'Color', 'k', 'LineWidth', 1);
 barError.CapSize = 0; 
 xlim([0.5, 14.5]);
-xline(0.5, 'k--', 1);
+yline(0.5, 'k--', 'LineWidth', 1);
 ylim([0.0, 1.0]);
 set(gca,'xtick',[]);
 set(gca,'xticklabel',[]);

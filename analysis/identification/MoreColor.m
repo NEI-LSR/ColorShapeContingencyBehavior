@@ -144,7 +144,7 @@ set(gca, 'XTick', 1:14);
 title('More colorful')
 
 xlim([0.5, 14.5]);
-xline(0.5, 'k--', 1);
+yline(0.5, 'k--', 'LineWidth', 1);
 
 
 
