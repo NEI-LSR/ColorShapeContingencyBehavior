@@ -2,7 +2,7 @@
 Compute and plot basic accuracy metrics for color categories data:
     Accuracy over time (by session and by trial)
     Accuracy per cue color (not normalized like a choice prob matrix)
-    Psychometric functions
+    Psychometric functions (Weibull cdfs)
 Toggle which subjects / subject sets (csc vs. naive)
 Toggle dates included
 View for individual subjects and combined (not currently normalized by amount of data per monkey)
@@ -24,7 +24,7 @@ from analysis.color_categories import cc_plot_functions as color_categories_plot
 use_fs = 10 # fontsize
 
 # Change this 
-subject_set = 'csc' # csc (color-shape stimuli monkeys) or naive (monkeys from PNAS 2025 paper)
+subject_set = 'naive' # csc (color-shape stimuli monkeys) or naive (monkeys from PNAS 2025 paper)
 remove_learning = True
 n_nearby = 1 # 0 if only grab focal color, >0 if grab narrow range around it; e.g., 1 gives [cue-1, cue, cue+1]
 use_only_correct_closest = False # if restrict psychometric function analysis to trials where choice was correct or closest foil
@@ -111,14 +111,14 @@ for s, subject in enumerate(subjects):
     plt.close(fig)
    
     # Plot accuracy per session
-    session_accuracies = subject_behavior_valid.groupby('session')['is_correct'].mean().to_numpy()
-    session_dates = list(subject_behavior_valid['session'].unique())
-    fig, axs = plt.subplots()
-    fig = color_categories_plot_funcs.plot_session_accuracy(axs=axs, fig=fig, subject=subject, 
-                              session_dates=session_dates, session_accuracies=session_accuracies,
-                              out_dir = None, save = False)
-    plt.show(fig)
-    plt.close(fig)
+    #session_accuracies = subject_behavior_valid.groupby('session')['is_correct'].mean().to_numpy()
+    #session_dates = list(subject_behavior_valid['session'].unique())
+    #fig, axs = plt.subplots()
+    #fig = color_categories_plot_funcs.plot_session_accuracy(axs=axs, fig=fig, subject=subject, 
+    #                          session_dates=session_dates, session_accuracies=session_accuracies,
+    #                          out_dir = None, save = False)
+    #plt.show(fig)
+    #plt.close(fig)
     
     # Also get reaction time
     if subject_set == 'csc':
@@ -127,15 +127,15 @@ for s, subject in enumerate(subjects):
         reaction_times = time_responded - time_initiated - 1250 # 1250 ms between initiation and choice presentation
         mean_reaction_time = np.mean(reaction_times)
         sample_std_reaction_time = np.std(reaction_times, ddof=1)
-        fig, axs = plt.subplots()
-        axs.hist(reaction_times, color='gray')
-        axs.vlines(mean_reaction_time+sample_std_reaction_time,0,30000)
-        axs.vlines(mean_reaction_time-sample_std_reaction_time,0,30000)
-        axs.vlines(mean_reaction_time,0,30000, color='red')
-        axs.text(.5,.9, 'mean RT: ' + str(mean_reaction_time), transform=axs.transAxes)
-        axs.text(.5,.7, 'std RT: ' + str(sample_std_reaction_time), transform=axs.transAxes)
-        plt.show(fig)
-        plt.close(fig)
+        #fig, axs = plt.subplots()
+        #axs.hist(reaction_times, color='gray')
+        #axs.vlines(mean_reaction_time+sample_std_reaction_time,0,30000)
+        #axs.vlines(mean_reaction_time-sample_std_reaction_time,0,30000)
+        #axs.vlines(mean_reaction_time,0,30000, color='red')
+        #axs.text(.5,.9, 'mean RT: ' + str(mean_reaction_time), transform=axs.transAxes)
+        #axs.text(.5,.7, 'std RT: ' + str(sample_std_reaction_time), transform=axs.transAxes)
+        #plt.show(fig)
+        #plt.close(fig)
         
         print(f"subject {subject} had an average RT of {mean_reaction_time} with std {sample_std_reaction_time}")
     
@@ -319,8 +319,8 @@ axs.set_xticks([0,np.ceil(n_colors/4).astype(int),np.ceil(n_colors/2).astype(int
 #axs.set_xlabel('Color difference (cue vs. foil, degrees)', fontsize=use_fs)
 #axs.set_ylabel('Accuracy', fontsize=use_fs)
 #axs.set_box_aspect(1)
-plt.savefig(os.path.join(out_dir, 'fig7', subject_set + '_combined_'+suffix+'_weibull.svg'))
-plt.savefig(os.path.join(out_dir, 'fig7', subject_set + '_combined_'+suffix+'_weibull.png'), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(out_dir, 'fig7', subject_set + '_combined'+suffix+'psychometric_functions_weibull.svg'))
+plt.savefig(os.path.join(out_dir, 'fig7', subject_set + '_combined'+suffix+'psychometric_functions_weibull.png'), dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 

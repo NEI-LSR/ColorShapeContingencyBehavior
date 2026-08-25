@@ -1,3 +1,7 @@
+"""
+Run the free variation of the TCC model 
+"""
+
 import os
 import pandas as pd
 import numpy as np

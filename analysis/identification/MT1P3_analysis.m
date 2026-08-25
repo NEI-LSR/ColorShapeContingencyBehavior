@@ -1,4 +1,15 @@
 function MT1P3_analysis()
+% Identification trials: monkeys and humans were shown one of the 14 
+% colored shapes and then two choice options: one that matched the cue in
+% color but not shape, one that matched the cue in shape but not color.
+% This script computes the probability of choosing the option that matched
+% the cue's color, averaged across subjects. 
+
+MT1P3_identification(false)
+
+end
+
+function MT1P3_identification(doHuman)
 
 dataDir = '../../data/identification/';
 out_dir = "../../figures/figs3_4/";
@@ -18,16 +29,7 @@ n17 = 'shapecolor_17.csv';
 n18 = 'shapecolor_18.csv';
 humanNames = {n10, n11, n12, n13, n14, n15, n16, n17, n18};
 
-doHuman = bool_dlg({'human data?'}, 0);
-
-if isempty(doHuman)
-    return;
-end
-
 % Plotting colors
-%redVals = [235,141,202,122,141,86,86,50,157,95,227,136,186,113];
-%greenVals = [139,84,166,102,186,114,188,115,163,102,133,82,166,102];
-%blueVals = [167,97,90,52,123,72,205,119,254,149,240,139,187,109];
 redVals = [224,141,190,122,123,86,66,50,144,95,212,136,186,113];
 greenVals = [152,84,170,102,186,114,188,115,172,102,151,82,166,102];
 blueVals = [155,97,106,52,128,72,186,119,222,149,208,139,187,109];
@@ -363,3 +365,5 @@ fontsize(10,"points");
 exportgraphics(f, out_dir + tstr + "_scatter_identification.svg",Resolution=300);
 exportgraphics(f, out_dir + tstr + "_scatter_identification.png",Resolution=300);
 hold off;
+
+end

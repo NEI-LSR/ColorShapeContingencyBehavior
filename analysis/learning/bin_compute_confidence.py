@@ -11,11 +11,11 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 # Choose subject
-subject = 'w' # one of 'w', 'je', 'jo'
+subject = 'jo' # one of 'w', 'je', 'jo'
 
 # Choose task
-tasks = ['Probe_4AFC', 'Train_2AFC_idtrials', 'Train_4AFC', 'Train_2AFC'] # options
-task = tasks[3] # which task to bin data for
+tasks = ['Probe_4AFC', 'Train_4AFC', 'Train_2AFC'] # options 'Train_2AFC_idtrials'
+task = tasks[0] # which task to bin data for
 
 # Set directories
 data_dir = os.path.join('data', 'learning') #'/data/learning'
@@ -109,9 +109,9 @@ if task=='Probe_4AFC':
     plt.close()
     
     plateau_accuracy = plateau_vals[plateau_vals['subject']==subject]['all_trials_mean'].item()
-    threshold_accuracy = 0.95 * (plateau_accuracy - .25) + .25
+    threshold_accuracy = 0.95 * (plateau_accuracy - .25) + .25 # 95% of the way between chance and plateau
     
-    
+    # When do they hit threshold on either trial type?
     reaches_shape_plateau = shape_accs < threshold_accuracy
     reaches_shape_plateau = np.where(reaches_shape_plateau==False)[0][0]
     reaches_color_plateau = color_accs < threshold_accuracy

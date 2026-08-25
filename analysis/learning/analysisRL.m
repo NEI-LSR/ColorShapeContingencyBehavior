@@ -1,6 +1,7 @@
 function analysisRL()
-
-analyse4AFCProbeData("jo", "Probe_4AFC", true)
+% Fit Rescorla-Wagner reinforcement learning model to long-term memory
+% trial data for each subject. Save out fit parameters and curves. 
+analyse4AFCProbeData("w", "Probe_4AFC", true)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function analyse4AFCProbeData(subject, task, saveFiles)

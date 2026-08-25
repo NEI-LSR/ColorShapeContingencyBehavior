@@ -1,3 +1,8 @@
+% This script compares each color's colorfulness rating to it's probability
+% of being chosen over shape on identification trials by computing
+% the pearson correlation between these values and plotting them
+% against each other on a scatter plot. It relies on outputs from
+% MT1P3_analysis.m and MoreColor.m
 clear
 
 resultsDir = '../../results/identification';
@@ -45,9 +50,6 @@ hyfit = predict(hModel, xfit);
 myfit = predict(mModel, xfit);
 
 % Color info
-% redVals = [235,141,202,122,141,86,86,50,157,95,227,136,186,113];
-% greenVals = [139,84,166,102,186,114,188,115,163,102,133,82,166,102];
-% blueVals = [167,97,90,52,123,72,205,119,254,149,240,139,187,109];
 redVals = [224,141,190,122,123,86,66,50,144,95,212,136,186,113];
 greenVals = [152,84,170,102,186,114,188,115,172,102,151,82,166,102];
 blueVals = [155,97,106,52,128,72,186,119,222,149,208,139,187,109];

@@ -18,11 +18,11 @@ plt.rcParams['font.sans-serif'] = ['Arial']
 plt.rcParams['font.serif'] = ['Times']
 
 # Choose subject
-subject = 'w' # one of 'w', 'je', 'jo'
+subject = 'jo' # one of 'w', 'je', 'jo'
 
 # Choose task
 tasks = ['Probe_4AFC', 'Train_4AFC', 'Train_2AFC'] #, 'Train_2AFC_idtrials']
-task = tasks[0] # which task to plot
+task = tasks[1] # which task to plot
 
 # Load Data 
 data_dir = os.path.join('results', 'learning') 

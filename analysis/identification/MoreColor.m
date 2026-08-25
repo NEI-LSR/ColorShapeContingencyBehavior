@@ -1,4 +1,7 @@
 function alldata = MoreColor(nms)
+% Take human colorfulness data and compute colorfulness ratings
+% as how many times a given color was picked as more colorful
+% than the other option divided by how many times that color was shown
 
 dataDir = '../../data/identification/';
 resultsDir = "../../results/identification/"; 
@@ -8,9 +11,6 @@ if ~nargin
     nms = {'MoreColor_2.csv', 'MoreColor_3.csv'};
 end
 
-% redVals = [235,141,202,122,141,86,86,50,157,95,227,136,186,113];
-% greenVals = [139,84,166,102,186,114,188,115,163,102,133,82,166,102];
-% blueVals = [167,97,90,52,123,72,205,119,254,149,240,139,187,109];
 redVals = [224,141,190,122,123,86,66,50,144,95,212,136,186,113];
 greenVals = [152,84,170,102,186,114,188,115,172,102,151,82,166,102];
 blueVals = [155,97,106,52,128,72,186,119,222,149,208,139,187,109];

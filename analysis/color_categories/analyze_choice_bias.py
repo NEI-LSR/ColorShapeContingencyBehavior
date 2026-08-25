@@ -1,3 +1,7 @@
+"""
+Load bootstrapped choice bias curves, fit fourier regressions, and plot
+"""
+
 import os
 import pandas as pd
 import numpy as np
@@ -10,7 +14,6 @@ plt.rcParams['font.sans-serif'] = ['Helvetica']
 plt.rcParams['font.serif'] = ['Times']
 
 # Change these
-new_weighted = False
 subsample_size = None
 K=6 # fourier components to allow for
 
@@ -19,16 +22,11 @@ data_dir = os.path.join('results', 'color_categories')
 out_dir = os.path.join('figures', 'fig6')
 color_dir = 'color_definitions'
 
-if new_weighted == False:
+if subsample_size is None:
     suffix = ''
     csc = np.load(os.path.join(data_dir, 'csc_choice_biases.npz'))
     naive = np.load(os.path.join(data_dir, 'naive_choice_biases.npz'))
 else:
-    suffix = '_weighted'
-    csc = np.load(os.path.join(data_dir, 'csc_choice_biases_new_weighting.npz'))
-    naive = np.load(os.path.join(data_dir, 'naive_choice_biases_new_weighting.npz'))
-
-if subsample_size is not None:
     suffix = '_subsampled_to_' + str(subsample_size)
     csc = np.load(os.path.join(data_dir, 'csc_choice_biases'+suffix+'.npz'))
     naive = np.load(os.path.join(data_dir, 'naive_choice_biases'+suffix+'.npz'))

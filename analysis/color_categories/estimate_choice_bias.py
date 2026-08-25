@@ -16,10 +16,10 @@ from analysis.color_categories import cc_plot_functions as color_categories_plot
 
 # Change this 
 boots = 1000 # set to 1 if don't bootstrap, just use all data once
-use_weights = False # vestigial, remove
 subsample_size = None # Only use if getting data for power analysis
 
 # Drectories
+data_dir = os.path.join('data', 'color_categories')
 results_dir = os.path.join('results', 'color_categories')
 out_dir = results_dir
 color_dir = 'color_definitions'
@@ -29,7 +29,7 @@ nafc = 4 # how many choice options per trial
 
 for subject_set in ['csc', 'naive']: 
     # Load data
-    behavior_data_path = os.path.join(results_dir, subject_set + '_valid_trials.csv')
+    behavior_data_path = os.path.join(data_dir, subject_set + '_valid_trials.csv')
     behavior_data_valid = pd.read_csv(behavior_data_path)
     if subject_set == 'csc': 
         # Subject and paradigm info
@@ -140,7 +140,7 @@ for subject_set in ['csc', 'naive']:
             theta_shift = np.zeros(n_colors)
             use_thetas = np.arange(0,360,360/n_colors) 
 
-            cue_gauss_fits, choice_biases, estimated_sigmas = color_categories_funcs.model_choice_bias(choice_prob_matrix_choice_v_cue, n_colors, theta_shift, weights=cue_choice_counts, use_weights=use_weights)
+            cue_gauss_fits, choice_biases, estimated_sigmas = color_categories_funcs.model_choice_bias(choice_prob_matrix_choice_v_cue, n_colors, theta_shift, weights=cue_choice_counts, use_weights=False)
             
             gauss_fit_thetas = [x[0] for x in cue_gauss_fits]
             gauss_fit_cue_choice_arr = [x[1] for x in cue_gauss_fits]
@@ -187,8 +187,6 @@ for subject_set in ['csc', 'naive']:
             
 
     suffix = ''
-    if use_weights == True:
-        suffix = suffix + '_new_weighting'
     if subsample_size is not None:
         suffix = suffix + '_to_' + str(subsample_size)
     np.savez(os.path.join(out_dir, subject_set + '_choice_biases'+suffix+'.npz'), all_choice_biases=all_choice_biases, average_sigmas=average_sigmas)

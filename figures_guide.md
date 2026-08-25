@@ -1,6 +1,6 @@
 # Figures guide
 
-This guide describes how to generate each figure in the manuscript. It describes inputs, outputs, and how to run each analysis script. You can find detailed descriptions of what each analysis script does in the README.md as well as at the top of each script. The directory structure of this repository is described in the README.md file.
+This guide describes how to generate each figure in the manuscript. It describes inputs, outputs, and how to run each analysis script. You can find detailed descriptions of what each analysis script does in the README as well as at the top of each script. The directory structure of this repository is described in the README.
 
 ## Prerequisites/Notes: 
 
@@ -12,10 +12,10 @@ This guide describes how to generate each figure in the manuscript. It describes
 
 4. Each figure is saved out twice, once as a scalable vector graphic (.svg) and once as a png. 
 
-## Learning 
+## Learning (Fig. 2)
 
 ### Fig. 2B, 2D: short-term memory and long-term memory learning curves
-1. **Raw trial data** are in `data/learning` and are named as `[subject]_[task]_[x]AFC.csv`. When "task" = "Train" this corresponds to short-term memory trials; "task" = "Probe" corresponds to long-term memory trials. When x=2, this is a 2-alternative forced choice task; when x=4, a 4-alternative forced choice task. 
+1. **Raw trial data** are in `data/learning` and are named as `[subject]_[task]_[x]AFC.csv`. When "task" = "Train" this corresponds to short-term memory trials; "task" = "Probe" corresponds to long-term memory trials. When x=2, this is a 2-alternative forced choice task; when x=4, a 4-alternative forced choice task. These files contain info on trial time, cue, choice options, choice made, and trial type.
 
 2. **Basic summary statistics:** Open `analysis/learning/learning_performance.py`. No inputs need to be changed. Click run. This script outputs two items:
 
@@ -26,32 +26,34 @@ This guide describes how to generate each figure in the manuscript. It describes
 3. **Bin and bootstrap trial data:** Open `analysis/learning/bin_compute_confidence.py`. The inputs to this script are the raw trial data and output #1 of step #2 above. At the top of the script, change `subject=''` and `task=''` to the subject and task you want to obtain learning curves for. For Fig. 2B, you will run this 5 times:
     
     - `subject='w'` `task='tasks[2]'` (2AFC short-term memory trials)
-    - `subject='w'` `task='tasks[3]'` (4AFC short-term memory trials)
+    - `subject='w'` `task='tasks[1]'` (4AFC short-term memory trials)
     - `subject='je'` `task='tasks[2]'`
-    - `subject='je'` `task='tasks[3]'`
-    - `subject='jo'` `task='tasks[2]'`
-
-    and for Fig. 2D, you will run this 3 times:
-
-    - `subject='w'` `task='tasks[1]'` (4AFC long-term memory trials)
     - `subject='je'` `task='tasks[1]'`
     - `subject='jo'` `task='tasks[1]'`
 
-    This outputs two things:
+    and for Fig. 2D, you will run this 3 times:
+
+    - `subject='w'` `task='tasks[0]'` (4AFC long-term memory trials)
+    - `subject='je'` `task='tasks[0]'`
+    - `subject='jo'` `task='tasks[0]'`
+
+    This outputs three things:
 
     1. `results/learning/[subject]_[task]_[n]AFC_learning_curve_data_1000_bootstraps_all_binned.npz`: one zipped numpy archive per subject/task combination. Each zip archive contains binned trial data for each trial type and corresponding 95% CIs, as well as year labels for each bin. E.g., `w_Train_4AFC_learning_curve_data_1000_bootstraps_all_binned.npz` is the file for monkey W's 4AFC short-term memory learning curve data.
 
-    2. In your python console it will print out the number of trials and sessions each subject completed, and for how many trial bins of the learning phase of long-term memory trials performance on shape-to-color trials was above performance on color-to-shape trials (see Methods).
+    2. In your python console it will print out the number of trials and sessions each subject completed.
+    
+    3. For long-term memory trials only, it will print out the percentage of trial bins during the learning phase that shape-to-color performance was above color-to-shape performance (see Methods). It also plots some intermediate plots (not saved out) for visualizing this.
 
-4. **Fit reinforcement learning model:** Open `analysis/learning/analysisRL.m` in MATLAB. The input to this script are the raw trial data in `data/learning`. The function `analyse4AFCProbeData()` takes three positional arguments: subject, task, saveFiles. Make sure task = `"Probe_4AFC"` and saveFiles = `true`. Run the script for each subject (`"w"`, `"je"`, and `"jo"`). This outputs 3 items per subject:
+4. **Fit reinforcement learning model:** Open `analysis/learning/analysisRL.m` in MATLAB. The input to this script is the raw trial data in `data/learning`. The function `analyse4AFCProbeData()` takes three positional arguments: subject, task, saveFiles. Make sure task = `"Probe_4AFC"` and saveFiles = `true`. Run the script for each subject (`"w"`, `"je"`, and `"jo"`). This outputs 3 items per subject:
 
      1. `results/learning/[subject]_Probe_4AFC_RL_params.csv`, which contains the RL fit parameters (learning rate, inverse temperature, and initial value / initial performance) and 95% CIs. 
      
-     2. `results/learning/[subject]_Probe_4AFC_choose_shape_RLfit.mat`, which contains the RL fit yvalues (accuracies) for color-to-shape trials.
+     2. `results/learning/[subject]_Probe_4AFC_choose_shape_RLfit.mat`, which contains the RL fit y-values (accuracies) for color-to-shape trials.
      
-     3. `results/learning/[subject]_Probe_4AFC_choose_color_RLfit.mat`, which contains the RL fit yvalues (accuracies) for shape-to-color trials.
+     3. `results/learning/[subject]_Probe_4AFC_choose_color_RLfit.mat`, which contains the RL fit y-values (accuracies) for shape-to-color trials.
 
-5. **Plot figures**: Open `analysis/plot_learning_curves.py`. This script takes as input the outputs of steps 3 and 4 to plot the learning curves shown in Fig. 2B and 2D. Run this script for each subject and task separately by changing the inputs to `subject=''` and `task=''` at the top of the script. This outputs one figure per subject/task combination:
+5. **Plot figures**: Open `analysis/plot_learning_curves.py`. This script takes as input the outputs of steps 3 and 4 to plot the learning curves shown in Fig. 2B and 2D. Run this script for each subject and task separately by changing the inputs to `subject=''` and `task=''` at the top of the script (see step 3 for all combinations). This outputs one figure per subject/task combination:
 
     1. `figures/fig2/[subject]_[task]_[n]AFC_learning_curve.svg`, `.png`.
 
@@ -60,41 +62,45 @@ This guide describes how to generate each figure in the manuscript. It describes
 ## Identification (Figs. 3,4)
 
 ### Figs. 3B, 3C, 3F: Monkey identification trials
-1. **Raw trial data** are in `data/identification/monkeyP3data.csv`.
+1. **Raw trial data** are in `data/identification/monkeyP3data.csv`. This includes info about trial time, cue, choice options, and choice made. 
 
-2. **Analyze and plot**: Open `analysis/identification/MT1P3_analysis.m` in MATLAB. Click Run. A pop-up Options box with a checkbox saying "human data" will appear. Do not check the checkbox. Click continue. The script will run and output 4 items:
+2. **Compute match color probabilities and plot**: Open `analysis/identification/MT1P3_analysis.m` in MATLAB. At the top of the script, under `function MT1P3_analysis()`, the function `MT1P3_identification()` takes one positional argument, `doHuman`. Set this to false, i.e., `MT1P3_identification(false)`, so it runs analysis for monkey data. Click Run. The script calls `fitEllipse.m` to fit an ellipse to the match color probability polar coordinates. The script will output 4 items:
 
     1. `results/identification/monkey_choosecolor_probs.csv`: a csv containing the choose color over choose shape probabilities
-    2. `figures/figs3_4/Monkey_bar_chart.svg`, `.png`: Fig. 3B
-    3. `figures/figs3_4/Monkey_scatter_identification.svg`, `.png`: Fig. 3C
-    4. `figures/figs3_4/Monkey_polar_identification.svg`, `.png`: Fig. 3F
+    2. `figures/figs3_4/Monkey_bar_chart.svg`, `.png`: Fig. 3B, a bar chart of the match color probabilities
+    3. `figures/figs3_4/Monkey_scatter_identification.svg`, `.png`: Fig. 3C, a scatter plot of match color probabilities, dark colors vs. light colors
+    4. `figures/figs3_4/Monkey_polar_identification.svg`, `.png`: Fig. 3F, a polar plot of the match color probabilities and ellipse fit
 
 ### Fig. 3D: Human colorfulness ratings
 
-1. **Raw trial data** are in `data/identification/MoreColor_i.csv` for $i \in [2,3]$. The different files contain different batches of human participants. 
+1. **Raw trial data** are in `data/identification/MoreColor_[i].csv` for $i \in [2,3]$. The different files contain different batches of human participants. 
 
-2. **Analyze and plot**: Open `analysis/identification/MoreColor.m` in MATLAB. Click run. The script will output 2 items.
+2. **Compute colorfulness ratings and plot**: Open `analysis/identification/MoreColor.m` in MATLAB. Click run. The script will output 2 items.
 
     1. `results/identification/morecolor_probs.csv`: a csv containing the probability each color is rated more colorful than the other colors
-    2. `figures/figs3_4/more_colorful_polar_identification.svg`, `.png`: Fig. 3D
+    2. `figures/figs3_4/more_colorful_polar_identification.svg`, `.png`: Fig. 3D, a polar plot of the colorfulness ratings (note the error bars are plotted but eclipsed by the size of the data points)
 
 ### Fig. 4: Human identification trials
 
-1. **Raw trial data** are in `data/identification/[shapecolor_i].csv` for $i \in [10, 18]$. The different csvs contain different batches of human participants. 
+1. **Raw trial data** are in `data/identification/shapecolor_[i].csv` for $i \in [10, 18]$. The different csvs contain different batches of human participants. 
 
-2. **Analyze and plot:** Open `analysis/identification/MT1P3_analysis.m` in MATLAB. Click Run. A pop-up Options box with a checkbox saying "human data" will appear. Check the checkbox. Click continue. This script calls on `getMT1P3HumanData.m` to compile and parse through the 9 input csvs. The script will run and output 4 items:
+2. **Compute match color probability and plot:** Open `analysis/identification/MT1P3_analysis.m` in MATLAB. At the top, under  under `function MT1P3_analysis()`, set `MT1P3_identification(true)`. Click Run.  This script calls on `getMT1P3HumanData.m` to compile and parse through the 9 input csvs. The script will run and output 4 items:
 
    1. `results/identification/human_choosecolor_probs.csv`: a csv containing the choose color over choose shape probabilities
-    2. `figures/figs3_4/Human_bar_chart.svg`, `.png`: Fig. 4A
-    3. `figures/figs3_4/Human_scatter_identification.svg`, `.png`: Fig. 4B
-    4. `figures/figs3_4/Human_polar_identification.svg`, `.png`: Fig. 4C
+    2. `figures/figs3_4/Human_bar_chart.svg`, `.png`: Fig. 4A, a bar chart of match color probabilities
+    3. `figures/figs3_4/Human_scatter_identification.svg`, `.png`: Fig. 4B, a scatter plot of match color probabilities, dark colors vs. light colors
+    4. `figures/figs3_4/Human_polar_identification.svg`, `.png`: Fig. 4C, a polar plot of match color probabilities and ellipse fit
 
 
 ### Fig. 3E: Colorfulness ratings and probability of choosing color comparison
 
-1. **Prerequisite**: You must run the three sections above (Figs. 3B, 3C, 3F; Fig. 3D, and Fig. 4) before completing this. The inputs to this analysis are the `morecolor_probs.csv` and the human or monkey `_choosecolor_probs.csv` files.
+1. **Prerequisite**: You must run the three sections above (Figs. 3B, 3C, 3F; Fig. 3D; and Fig. 4) before completing this. The inputs to this analysis are the `morecolor_probs.csv` and the human or monkey `_choosecolor_probs.csv` files.
 
-2. **Plot comparison:** Open `analysis/identification/plotProbvsMoreColor.m`. Click run. This will display in the MATLAB console the pearson correlation and corresponding p-value for the relationship between the choose color probabilities and the rated as more colorful probabilities (for humans and monkeys separately). It also outputs Fig. 3E at `figures/figs3_4/Monkey_choosecolor_vs_morecolor.svg`, `.png`.
+2. **Plot comparison:** Open `analysis/identification/plotProbvsMoreColor.m`. Click run. This has two outputs.
+
+    1. This will display in the MATLAB console the pearson correlation and corresponding p-value for the relationship between the choose color probabilities and the colorfulness ratings (for humans and monkeys separately). 
+    
+    2. `figures/figs3_4/Monkey_choosecolor_vs_morecolor.svg`, `.png`: Fig. 3E, a scatter plot of match color probability vs. colorfulness rating
 
 ## Color categories (Figs. 6, 7, S3, S4, S5)
 
@@ -102,7 +108,7 @@ This guide describes how to generate each figure in the manuscript. It describes
 
 1. **Raw trial data** are in `data/color_categories` and are named `csc_valid_trials.csv` and `naive_valid_trials.csv`. Anywhere the prefix "csc" is used refers to the trained ("ColorShapeContingency") monkeys; anywhere the prefix "naive" is used refers to the untrained monkeys (from Garside et al., 2025). Each csv contains all completed trials (aborted trials are excluded) for all subjects in each subject group. All analyses of these data use only completed trials. 
 
-2. **Estimate choice biases:** Open `analysis/color_categories/estimate_choice_bias.py`. At the top of this script under the note "Change this", you can change the number of bootstrap iterations (`boots=`) and trial sample size (`subsample_size=`, e.g., if you wanted to run a power analysis).  Make sure these are set to `boots=1000` and `subsample_size=None`. Click run. This will estimate the choice biases for each subject separately, as well as each combined subject group. This script produces intermediate plots: it will display the cue-choice confusion matrix, choice probability matrix (normalized confusion matrix), and gaussian fits overlaid with choice probability distributions for all cue colors for every 500th bootstrap. It outputs one item per subject group (trained, untrained):
+2. **Estimate choice biases:** Open `analysis/color_categories/estimate_choice_bias.py`. At the top of this script under the note "Change this", make sure `boots=1000` and `subsample_size=None`. You could change these if you wanted to vary the number of bootstrap iterations (`boots=`) or trial sample size (`subsample_size=`, e.g., if you wanted to run a power analysis). Click run. This will estimate the choice biases for each subject separately, as well as each combined subject group. This script produces intermediate plots: it will display the cue-choice confusion matrix, choice probability matrix (normalized confusion matrix), and gaussian fits overlaid with choice probability distributions for all cue colors for every 500th bootstrap. It gives one final output per subject group (trained, untrained):
 
     1. `results/color_categories/csc_chioce_biases.npz` and `results/color_categories/naive_choice_biases.npz`: a zipped archive of numpy arrays. One of the arrays contained in it, `all_choice_biases`, is the input to the next step, and contains all the bootstraped estimates of the choice biases. 
 
@@ -136,11 +142,11 @@ This guide describes how to generate each figure in the manuscript. It describes
     
     6. `results/color_categories/[subject_set]_range3_weibull_halfmax_info.csv`: one csv per subject group ("csc", "naive") containing hue angle and accuracy corresponding to each half-max slope in output #5 above. 
 
-### Figs. 7B and S5: Color categories psychometric function 
+### Figs. 7B and S5: Color categories psychometric function slopes 
 
 1. **The input data are the csvs from output #5 above**, that is, `results/color_categories/csc_weibull_slopes.csv` and `results/color_categories/naive_weibull_slopes.csv`.
 
-2. **Plot comparison of half-max slopes:** Open `analysis/color_categories/psychometric_slopes/py`. Make sure at the top `correct_closest = False` and
+2. **Plot comparison of half-max slopes:** Open `analysis/color_categories/psychometric_slopes.py`. Make sure at the top `correct_closest = False` and
 `r = 3` (see code for details on these variables). Click run. This outputs two items:
 
     1. `figures/fig7/csc_vs_naive_weibull_slopes_range3.svg`, `.png`: Fig. 7B, a scatter plot comparing the psychometric function slopes of trained and untrained monkeys

@@ -1,3 +1,7 @@
+"""
+Plot comparison of psychometric function slopes between trained and untrained
+subjects. 
+"""
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
